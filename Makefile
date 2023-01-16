@@ -1,4 +1,4 @@
-.PHONY: startclient startserver stopclient stopserver restartclient restartserver start stop
+.PHONY: startclient startserver stopclient stopserver
 
 startclient:
 	docker-compose -f vite-vue/docker-compose.yml up -d
@@ -12,14 +12,3 @@ stopclient:
 stopserver:
 	docker-compose down
 
-restartclient:
-	stopclient startclient
-
-restartserver:
-	stopserver startserver
-
-start:
-	startclient startserver
-
-stop:
-	stopclient stopserver
