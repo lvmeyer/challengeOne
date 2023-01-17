@@ -1,5 +1,5 @@
 <template>
-    <nav id="nav" class="d-flex justify-content-between p-3 bg-light">
+    <nav id="nav" class="d-flex justify-content-between pt-3 pb-2">
         <div>
             <router-link to="/" class="p-2 m-3">Home</router-link>
             <router-link to="/about" class="p-2 m-3">About</router-link>
@@ -19,10 +19,39 @@
             <router-link to="/register" class="p-2 m-3">Register</router-link>
         </div>
     </nav>
+    <hr />
 </template>
 
 <style>
 .router-link-active {
-    color: red;
+    background-color: #d9e8f5;
+    border-radius: 4px;
+}
+
+nav > div a {
+    color: black;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s ease-in-out;
+}
+
+nav > div a:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: black;
+    transform: scaleX(0);
+    transition: transform 0.2s ease-in-out;
+}
+
+nav > div a:hover {
+    color: gray;
+}
+
+nav > div > a:hover:before {
+    transform: scaleX(1);
 }
 </style>
