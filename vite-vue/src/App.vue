@@ -1,12 +1,12 @@
-<script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
-</script>
-
 <template>
-    <div>
-        <h1>hey</h1>
-        <HelloWorld msg="hey2" />
+    <TheNavigation />
+    <div class="container">
+        <router-view :key="$route.path"></router-view>
     </div>
 </template>
 
-<style scoped></style>
+<script setup lang="ts">
+import TheNavigation from "./components/TheNavigation.vue";
+</script>
+
+<style></style>
