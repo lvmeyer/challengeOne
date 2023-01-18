@@ -26,6 +26,9 @@ class Subscription
     #[ORM\OneToMany(mappedBy: 'subscription_id', targetEntity: User::class)]
     private Collection $users;
 
+    #[ORM\Column]
+    private ?int $price = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -86,6 +89,18 @@ class Subscription
                 $user->setSubscriptionId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }
