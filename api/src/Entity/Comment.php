@@ -33,6 +33,12 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private ?Movie $movie_id = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $counter = null;
+
+    #[ORM\OneToOne(mappedBy: 'commentaire_id', cascade: ['persist', 'remove'])]
+    private ?Moderation $moderation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -94,6 +100,40 @@ class Comment
     public function setMovieId(?Movie $movie_id): self
     {
         $this->movie_id = $movie_id;
+
+        return $this;
+    }
+
+    public function getCounter(): ?int
+    {
+        return $this->counter;
+    }
+
+    public function setCounter(?int $counter): self
+    {
+        $this->counter = $counter;
+
+        return $this;
+    }
+
+    public function getModeration(): ?Moderation
+    {
+        return $this->moderation;
+    }
+
+    public function setModeration(?Moderation $moderation): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($moderation === null && $this->moderation !== null) {
+            $this->moderation->setCommentaireId(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($moderation !== null && $moderation->getCommentaireId() !== $this) {
+            $moderation->setCommentaireId($this);
+        }
+
+        $this->moderation = $moderation;
 
         return $this;
     }
