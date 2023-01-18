@@ -26,6 +26,9 @@ class Ticket
     #[ORM\JoinColumn(nullable: false)]
     private ?Seance $seance_id = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $quantity = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -63,6 +66,18 @@ class Ticket
     public function setSeanceId(?Seance $seance_id): self
     {
         $this->seance_id = $seance_id;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?int $quantity): self
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }
