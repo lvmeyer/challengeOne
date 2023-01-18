@@ -3,7 +3,6 @@
         <main class="form-signin w-100 border p-4 rounded shadow">
             <form v-on:submit.prevent="handleLoginForm">
                 <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
                 <div class="form-floating">
                     <input
                         type="email"
@@ -31,6 +30,11 @@
                         me
                     </label>
                 </div>
+                <div class="w-50 m-auto mb-2 text-secondary">
+                    <router-link to="/register"
+                        >Not registered yet ?</router-link
+                    >
+                </div>
                 <button class="w-100 btn btn-lg btn-primary" type="submit">
                     Sign in
                 </button>
@@ -40,53 +44,30 @@
 </template>
 
 <script lang="ts">
+import { useUserStore } from "../../stores/UserStore.js";
+
+const { login } = useUserStore();
+
 export default {
     name: "Login",
     data() {
         return {
             email: "",
             password: "",
-            error: "",
         };
     },
     methods: {
         async handleLoginForm() {
             try {
-                console.log(this.email, this.password);
-                const response = await fetch("/api/login", {
-                    method: "POST",
-                    body: JSON.stringify({
-                        email: this.email,
-                        password: this.password,
-                    }),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(
-                        "Les informations de connexion sont incorrectes"
-                    );
-                }
-
-                const data = await response.json();
-                // Stocke les informations de l'utilisateur dans le state de l'application
-                // this.$store.commit("setUser", data);
-
+                await login({ email: "a@a.com", password: "123456" });
                 this.$router.push("/");
             } catch (error: any) {
-                this.error = error.message;
                 console.error(error);
             }
         },
     },
     mounted() {
-        console.log("mounted");
-        let user = localStorage.getItem("user");
-        localStorage.removeItem("user");
-        if (user) {
-            this.$router.push("/");
-        }
+        console.log("Login mounted");
     },
 };
 </script>
