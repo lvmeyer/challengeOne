@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    name: Test if PR is triggered - event ${{ matrix.node_version }} and ${{ matrix.os }}
+  ci-vue:
+    name: vue - Build and test - event ${{ matrix.node_version }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
