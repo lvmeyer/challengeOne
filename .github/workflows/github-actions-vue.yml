@@ -17,9 +17,10 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-      - uses: actions/checkout@v1
+      - run: echo "event name is:" ${{ github.event_name }}
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node_version }}
 
@@ -28,4 +29,5 @@ jobs:
           cd vite-vue
           npm install
           npm run build --if-present
-          npm test
+          npm run test
+          npm run coverage
