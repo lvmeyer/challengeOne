@@ -58,11 +58,12 @@ export default {
     },
     methods: {
         async handleLoginForm() {
-            try {
-                await login({ email: "a@a.com", password: "123456" });
+            const hasLoggedIn = await login({
+                email: "a@a.com",
+                password: "123456",
+            });
+            if (hasLoggedIn) {
                 this.$router.push("/");
-            } catch (error: any) {
-                console.error(error);
             }
         },
     },
