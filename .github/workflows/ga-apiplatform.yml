@@ -1,8 +1,10 @@
 name: apiplatform-github-actions
 
 on:
-  push:
+  # push:
   pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
