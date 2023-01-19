@@ -20,7 +20,10 @@ export const useUserStore = defineStore("UserStore", {
   getters: {},
 
   actions: {
-    async login(credentials: { email: string; password: string }) {
+    async login(credentials: {
+      email: string;
+      password: string;
+    }): Promise<boolean | void> {
       try {
         const response = await fetch("http://localhost:3003/api/login", {
           method: "POST",
@@ -34,9 +37,11 @@ export const useUserStore = defineStore("UserStore", {
         if (response.status !== 201 || !response.ok) {
           throw new Error(data.message);
         }
+        // TODO: check if user is needed
         this.user = data.user;
         this.isLoggedIn = true;
         localStorage.setItem("access_token", data.access_token);
+        return true;
       } catch (error) {
         console.error(error);
       }
