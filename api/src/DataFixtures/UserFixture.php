@@ -2,9 +2,9 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use App\Entity\User;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class UserFixture extends Fixture
 {
@@ -16,7 +16,7 @@ class UserFixture extends Fixture
         $user->setEmail('odessa@gmail.com');
         $user->setFirstname('Odessa');
         $user->setLastname('Chesneau');
-        $user->setRole('Admin');
+        $user->setRoles(['ROLE_ADMIN']);
         $user->setPassword($pwd);
 
         $manager->persist($user);
@@ -27,7 +27,7 @@ class UserFixture extends Fixture
         $user->setEmail('dan@gmail.com');
         $user->setFirstname('Dan');
         $user->setLastname('Levy');
-        $user->setRole('Admin');
+        $user->setRoles(['ROLE_ADMIN']);
         $user->setPassword($pwd);
 
         $manager->persist($user);
@@ -38,7 +38,7 @@ class UserFixture extends Fixture
         $user->setEmail('lea@gmail.com');
         $user->setFirstname('Lea');
         $user->setLastname('Ifergan');
-        $user->setRole('Admin');
+        $user->setRoles(['ROLE_ADMIN']);
         $user->setPassword($pwd);
 
         $manager->persist($user);
@@ -48,7 +48,7 @@ class UserFixture extends Fixture
         $user->setEmail('Rina@gmail.com');
         $user->setFirstname('Rina');
         $user->setLastname('Harroch');
-        $user->setRole('Admin');
+        $user->setRoles(['ROLE_ADMIN']);
         $user->setPassword($pwd);
 
         $manager->persist($user);
