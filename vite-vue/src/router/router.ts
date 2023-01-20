@@ -44,6 +44,16 @@ const routes = [
     name: "not-found",
     component: () => import("../views/NotFound.vue"),
   },
+  {
+    path: "/reservation",
+    name: "reservation",
+    component: () => import("../views/movie/Reservation.vue"),
+  },
+  {
+    path: "/purchase",
+    name: "purchase",
+    component: () => import("../views/movie/Reservation.vue"),
+  },
 ];
 
 export const router = createRouter({
