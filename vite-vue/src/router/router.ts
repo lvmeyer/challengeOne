@@ -47,13 +47,13 @@ const routes = [
   {
     path: "/reservation",
     name: "reservation",
-    component: () => import("../views/Reservation.vue"),
+    component: () => import("../views/movie/Reservation.vue"),
   },
   {
     path: "/purchase",
     name: "purchase",
-    component: () => import("../views/Purchase.vue"),
-  }
+    component: () => import("../views/movie/Reservation.vue"),
+  },
 ];
 
 export const router = createRouter({
