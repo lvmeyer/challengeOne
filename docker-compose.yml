@@ -88,6 +88,15 @@ services:
       - ./vite-vue:/usr/local/vite-vue
     working_dir: /usr/local/vite-vue
     command: "npm run dev"
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: mypassword
+    ports:
+      - "5051:80"
+    depends_on:
+      - database
 
 volumes:
   php_socket:

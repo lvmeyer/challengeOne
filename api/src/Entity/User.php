@@ -1,71 +1,12 @@
 <?php
-<<<<<<< HEAD
 
 namespace App\Entity;
 
 use App\Entity\Comment;
 use App\Entity\Subscription;
-use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-
-#[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
-#[ApiResource]
-class User
-{
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $firstname = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $lastname = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $role = null;
-
-  
-
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Comment::class)]
-    private Collection $comments;
-
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Ticket::class)]
-    private Collection $tickets;
-
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Review::class)]
-    private Collection $reviews;
-
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Moderation::class)]
-    private Collection $moderations;
-
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?Subscription $subscription_id = null;
-
-    public function __construct()
-    {
-        $this->comments = new ArrayCollection();
-        $this->tickets = new ArrayCollection();
-        $this->reviews = new ArrayCollection();
-        $this->moderations = new ArrayCollection();
-    }
-=======
-# api/src/Entity/User.php
-
-namespace App\Entity;
-
-use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -80,6 +21,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ApiResource(
     operations: [
@@ -96,6 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity('email')]
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[Groups(['user:read'])]
@@ -119,14 +62,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'json')]
     private array $roles = [];
->>>>>>> auth token
+
+    #[ORM\Column(length: 255)]
+    private ?string $firstname = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lastname = null;
+
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Comment::class)]
+    private Collection $comments;
+
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Ticket::class)]
+    private Collection $tickets;
+
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Review::class)]
+    private Collection $reviews;
+
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Moderation::class)]
+    private Collection $moderations;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Subscription $subscription_id = null;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
+        $this->moderations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-<<<<<<< HEAD
+
     public function getFirstname(): ?string
     {
         return $this->firstname;
@@ -151,8 +122,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-=======
->>>>>>> auth token
     public function getEmail(): ?string
     {
         return $this->email;
@@ -165,14 +134,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-<<<<<<< HEAD
-    public function getPassword(): ?string
-=======
     /**
      * @see PasswordAuthenticatedUserInterface
      */
+    
     public function getPassword(): string
->>>>>>> auth token
     {
         return $this->password;
     }
@@ -184,16 +150,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-<<<<<<< HEAD
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): self
-    {
-        $this->role = $role;
-=======
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
@@ -202,13 +158,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPlainPassword(?string $painPassword): self
     {
         $this->plainPassword = $painPassword;
->>>>>>> auth token
 
         return $this;
     }
 
-<<<<<<< HEAD
-   
+
     /**
      * @return Collection<int, Comment>
      */
@@ -235,7 +189,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $comment->setUserId(null);
             }
         }
-=======
+
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
@@ -251,13 +208,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
->>>>>>> auth token
 
         return $this;
     }
 
     /**
-<<<<<<< HEAD
      * @return Collection<int, Ticket>
      */
     public function getTickets(): Collection
@@ -358,9 +313,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-}
-=======
-     * A visual identifier that represents this user.
+
+    /* A visual identifier that represents this user.
      *
      * @see UserInterface
      */
@@ -377,4 +331,3 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->plainPassword = null;
     }
 }
->>>>>>> auth token
