@@ -15,6 +15,30 @@
   </div>
 </template>
 
+<style>
+.ticket {   
+    margin-top: 1em;
+    align-items: center;
+    border-radius: 30px;
+    background: rgb(170, 168, 168);
+    width: 75%;
+    padding: 2em;
+}
+
+.ticket_number {
+    display: flex;
+    flex-direction: row;
+}
+
+.input-ticket {
+    width: 10%;
+    height: 2em;
+    border-radius: 10px;
+    margin-left: 1em;
+    margin-bottom: 1em;
+}
+</style>
+
 <script>
 import GoBack from "../components/GoBack.vue";
 import filmDb from "../../films.json";

@@ -11,6 +11,16 @@
   </div>
 </template>
 
+<style>
+.booking {
+    align-items: center;
+    border-radius: 30px;
+    background: rgb(170, 168, 168);
+    width: 75%;
+    padding: 2em;
+}
+</style>
+
 <script>
 import GoBack from "../components/GoBack.vue";
 import filmDb from "../../films.json";
@@ -26,7 +36,6 @@ export default {
     };
   },
 
-
   methods: {
     async getData() {
       try {
@@ -37,7 +46,6 @@ export default {
       }
     },
   },
-
 
   created() {
     this.getData();
