@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 
 class UserController extends AbstractController
 {
-    public function changePassword(Request $request, UserPasswordEncoderInterface $encoder)
+    public function changePassword(Request $request, UserPasswordHasherInterface $encoder)
     {
         $data = json_decode($request->getContent(), true);
         
