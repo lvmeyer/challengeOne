@@ -2,15 +2,33 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+
+/**
+ * @Vich\Uploadable
+ */
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['movie:read']], 
+    denormalizationContext: ['groups' => ['movie:write']], 
+    types: ['https://schema.org/Movie'],
+    operations: [
+        new GetCollection(),
+        new Post(inputFormats: ['multipart' => ['multipart/form-data']])
+    ]
+)]
 class Movie
 {
     #[ORM\Id]
@@ -41,6 +59,22 @@ class Movie
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Review $review_id = null;
+
+    #[ApiProperty(types: ['https://schema.org/contentUrl'])]
+    #[Groups(['movie:read'])]
+    public ?string $contentUrl = null;
+
+     /**
+     * @Vich\UploadableField(mapping="media_object", fileNameProperty="filePath")
+     */
+    #[Groups(['movie:write'])]
+    public ?File $file = null;
+
+    #[ORM\Column(nullable: true)] 
+    public ?string $filePath = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
@@ -181,6 +215,24 @@ class Movie
     public function setReviewId(?Review $review_id): self
     {
         $this->review_id = $review_id;
+
+        return $this;
+    }
+
+    public function updateFile(File $file): void
+    {
+       $this->file  = $file;
+       $this->updatedAt = new DateTime();
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
