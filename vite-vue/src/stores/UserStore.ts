@@ -25,7 +25,7 @@ export const useUserStore = defineStore("UserStore", {
       password: string;
     }): Promise<boolean | void> {
       try {
-        const response = await fetch("http://localhost:3003/api/login", {
+        const response = await fetch("https://localhost/authentication_token", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
