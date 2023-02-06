@@ -59,8 +59,8 @@ export default {
     methods: {
         async handleLoginForm() {
             const hasLoggedIn = await login({
-                email: "a@a.com",
-                password: "123456",
+                email: this.email,
+                password: this.password,
             });
             if (hasLoggedIn) {
                 this.$router.push("/");

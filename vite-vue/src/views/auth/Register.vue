@@ -3,6 +3,7 @@
         <main class="form-signin w-100 border p-4 rounded shadow">
             <form v-on:submit.prevent="handleRegisterForm">
                 <h1 class="h3 mb-3 fw-normal">Sign up</h1>
+
                 <div class="form-floating">
                     <input
                         type="email"
@@ -13,6 +14,7 @@
                     />
                     <label for="floatingInput">Email address</label>
                 </div>
+
                 <div class="form-floating">
                     <input
                         type="password"
@@ -22,6 +24,28 @@
                         placeholder="Password"
                     />
                     <label for="floatingPassword">Password</label>
+                </div>
+
+                <div class="form-floating">
+                    <input
+                        type="text"
+                        v-model="firstname"
+                        class="form-control"
+                        id="floatingInput"
+                        placeholder="Firstname"
+                    />
+                    <label for="floatingInput">Firstname</label>
+                </div>
+
+                <div class="form-floating">
+                    <input
+                        type="text"
+                        v-model="lastname"
+                        class="form-control"
+                        id="floatingInput"
+                        placeholder="Lastname"
+                    />
+                    <label for="floatingInput">Lastname</label>
                 </div>
 
                 <div class="checkbox mb-3">
@@ -46,7 +70,7 @@
 <script lang="ts">
 import { useUserStore } from "../../stores/UserStore.js";
 
-const user = useUserStore();
+const { register } = useUserStore();
 
 export default {
     name: "Register",
@@ -54,10 +78,22 @@ export default {
         return {
             email: "",
             password: "",
+            firstname: "",
+            lastname: "",
         };
     },
     methods: {
-        async handleRegisterForm() {},
+        async handleRegisterForm() {
+            const hasRegister = await register({
+                email: this.email,
+                plainPassword: this.password,
+                firstname: this.firstname,
+                lastname: this.lastname,
+            });
+            if (hasRegister) {
+                this.$router.push("/login");
+            }
+        },
     },
     mounted() {
         console.log("Register mounted");
