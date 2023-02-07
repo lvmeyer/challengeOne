@@ -2,7 +2,6 @@
     <div>
         <h1>Movies</h1>
         <TheCarousel>
-        
         </TheCarousel>
     </div>
 </template>

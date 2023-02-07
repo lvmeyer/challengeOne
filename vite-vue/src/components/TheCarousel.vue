@@ -1,99 +1,140 @@
 <template>
-    
-<div id="app">
-	<Carousel :settings="settings" :breakpoints="breakpoints">
-        <slide v-for="slide in 10" :key="slide">
-            <div class="carousel__item">
-                <a href="">{{ slide }}</a>
+    <div class="carousel">
+        <div class="inner" ref="inner" :style="innerStyles">
+            <div class="card" v-for="movie in movies" :key="card">
+            {{ movie.title }}
+            {{ movie.duration }}
             </div>
-        </slide>
-        <!-- <MovieItem
-            v-for="movie in movieStore.movies"
-            :movie="movie"
-            :key="movie._id"
-        /> -->
-
-		<template #addons>
-			<navigation />
-		</template>
-	</Carousel>
-</div>
+        </div>
+    </div>
+    <button @click="prev">prev</button>
+    <button @click="next">next</button>
 </template>
 
-
-<script lang="ts">
-    //@ts-ignore
-    import { defineComponent } from 'vue'
-    import { Carousel, Pagination, Slide, Navigation } from 'vue3-carousel'
-    // import  useMovieStore  from "../stores/MovieStore"
-    import MovieItem from "../views/movie/components/MovieItem.vue"
-
-    import '../../node_modules/vue3-carousel/dist/carousel.css'
-
-    export default defineComponent({
-        name: 'Autoplay',
-        components: {
-            Carousel,
-            // MovieItem,
-            Pagination,
-            Navigation,
-            Slide
+<script>
+    import axios from 'axios';
+    const API_URL = 'https://localhost'
+    export default {
+        data () {
+        return {
+            movies: [],
+            innerStyles: {},
+            step: '',
+            transitioning: false
+        }
         },
-        data: () => ({
-            // carousel settings
-            settings: {
-                itemsToShow: 1,
-                snapAlign: 'center',
-            },
-            // breakpoints are mobile first
-            // any settings not specified will fallback to the carousel settings
-            breakpoints: {
-            // 700px and up
-            700: {
-                itemsToShow: 3.5,
-                snapAlign: 'center',
-            },
-            // 1024 and up
-            1024: {
-                itemsToShow: 7,
-                snapAlign: 'start',
-            },
-            },
-        })
-    })
+    
+        mounted () {
+            this.fetchMovies()
+        this.setStep()
+        this.resetTranslate()
+        },
+    
+        methods: {
 
-    // const movieStore = useMovieStore();
-    // movieStore.fetchMovies();
-
-
+            async fetchMovies() {
+                        const response = await axios.get(`${API_URL}/movies?page=1`);
+                        this.movies = await JSON.parse(JSON.stringify(response.data["hydra:member"]));
+                        
+                        console.log(this.movies)
+                    },
+        setStep () {
+            const innerWidth = this.$refs.inner.scrollWidth
+            const totalCards = this.movies.length
+            this.step = `${innerWidth / totalCards}px`
+            
+        },
+    
+        next () {
+            if (this.transitioning) return
+    
+            this.transitioning = true
+    
+            this.moveLeft()
+    
+            this.afterTransition(() => {
+            const card = this.cards.shift()
+            this.movies.push(card)
+            this.resetTranslate()
+            this.transitioning = false
+            })
+        },
+    
+        prev () {
+            if (this.transitioning) return
+    
+            this.transitioning = true
+    
+            this.moveRight()
+    
+            this.afterTransition(() => {
+            const card = this.cards.pop()
+            this.cards.unshift(card)
+            this.resetTranslate()
+            this.transitioning = false
+            })
+        },
+    
+        moveLeft () {
+            this.innerStyles = {
+            transform: `translateX(-${this.step})
+                        translateX(-${this.step})`
+            }
+        },
+    
+        moveRight () {
+            this.innerStyles = {
+            transform: `translateX(${this.step})
+                        translateX(-${this.step})`
+            }
+        },
+    
+        afterTransition (callback) {
+            const listener = () => {
+            callback()
+            this.$refs.inner.removeEventListener('transitionend', listener)
+            }
+            this.$refs.inner.addEventListener('transitionend', listener)
+        },
+    
+        resetTranslate () {
+            this.innerStyles = {
+            transition: 'none',
+            transform: `translateX(-${this.step})`
+            }
+        }
+        }
+    }
 </script>
 
-<style scoped>
+<style>
+    .carousel {
+    width: 170px;
+    overflow: hidden;
+    }
 
-body {
-	padding: 20px;
-}
+    .inner {
+    transition: transform 0.2s;
+    white-space: nowrap;
+    }
 
-.carousel__item {
-	min-height: 200px;
-	width: 100%;
-	background-color: #642afb;
-	color: white;
-	font-size: 20px;
-	border-radius: 8px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
+    .card {
+        width: 40px;
+        margin-right: 10px;
+        display: inline-flex;
 
-.carousel__slide {
-	padding: 10px;
-}
+        /* optional */
+        height: 50px;
+        background-color: #39b1bd;
+        color: white;
+        border-radius: 4px;
+        align-items: center;
+        justify-content: center;
+    }
 
-.carousel__prev,
-.carousel__next {
-	background-color: #fff7;
-}
-
-
+    /* optional */
+    button {
+    margin-right: 5px;
+    margin-top: 10px;
+    }
 </style>
