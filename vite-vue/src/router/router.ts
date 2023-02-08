@@ -52,7 +52,7 @@ const routes = [
   {
     path: "/purchase",
     name: "purchase",
-    component: () => import("../views/movie/Reservation.vue"),
+    component: () => import("../views/movie/Purchase.vue"),
   },
 ];
 
