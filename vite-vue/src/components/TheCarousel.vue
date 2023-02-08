@@ -4,13 +4,13 @@
 <div class="inner-carousel">
 <div class="track">
 
-    <div class="card-container" v-for="movie in movies" :key="card">
-        <a v-bind:href="'/movies/'+ movie.id">
+    <div class="card-container" v-for="movie in movies" :key="movie.id">
+      <router-link :to="'/movie/' + movie.id">  
             <div class="card card1" >
                 <p>{{ movie.title }}</p>
                 <p>{{ movie.duration }} min</p>
             </div>
-        </a>
+      </router-link>
     </div>
 
 
@@ -22,40 +22,32 @@
 </div>
 </div>
 
-
-
-
-    <!-- <div class="carousel">
-        <div class="inner" ref="inner" :style="innerStyles">
-            <div class="card" v-for="movie in movies" :key="card">
-            {{ movie.title }}
-            {{ movie.duration }}
-            </div>
-        </div>
-    </div>
-    <button @click="prev">prev</button>
-    <button @click="next">next</button> -->
 </template>
 
 <script>
+    import { ref, onBeforeMount } from 'vue';
     import axios from 'axios';
-const API_URL = 'https://localhost'
+    
+    const API_URL = 'https://localhost/'
     export default {
-    data () {
+      setup () {
+        const movies = ref({});
+        onBeforeMount(async () => {
+          const response = await axios.get(`${API_URL}movies?page=1`);
+          movies.value = await JSON.parse(JSON.stringify(response.data["hydra:member"]));
+            
+        });
+    
         return {
-            movies: [],
-            innerStyles: {}
+            movies
         }
     },
-
     mounted () {
-        this.fetchMovies()
 
         const prev = document.querySelector(".prev");
         const next = document.querySelector(".next");
         const carousel = document.querySelector(".carousel-container");
 
-        console.log(carousel)
         const track = document.querySelector(".track");
         let width = carousel.offsetWidth;
         let index = 0;
@@ -79,16 +71,8 @@ const API_URL = 'https://localhost'
         }
         track.style.transform = "translateX(" + index * -width + "px)";
         })
-    },
-    methods: {
-
-    async fetchMovies() {
-                const response = await axios.get(`${API_URL}/movies?page=1`);
-                this.movies = await JSON.parse(JSON.stringify(response.data["hydra:member"]));
-                
-                console.log(this.movies)
     }
-}
+
 }
 
 
