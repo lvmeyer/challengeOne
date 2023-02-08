@@ -40,6 +40,22 @@ const routes = [
     },
   },
   {
+    path: "/product",
+    name: "product",
+    component: () => import("../views/product/ProductList.vue"),
+  },
+  {
+    path: "/company/product",
+    name: "company",
+    component: () => import("../views/company/List.vue"),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/review",
+    name: "review",
+    component: () => import("../views/review/ReviewForm.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "not-found",
     component: () => import("../views/NotFound.vue"),
