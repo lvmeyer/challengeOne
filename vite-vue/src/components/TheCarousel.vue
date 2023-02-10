@@ -28,12 +28,12 @@
     import { ref, onBeforeMount } from 'vue';
     import axios from 'axios';
     
-    const API_URL = 'https://localhost/'
+    const API_URL = import.meta.env.VITE_API_URL
     export default {
       setup () {
         const movies = ref({});
         onBeforeMount(async () => {
-          const response = await axios.get(`${API_URL}movies?page=1`);
+          const response = await axios.get(`${API_URL}/movies?page=1`);
           movies.value = await JSON.parse(JSON.stringify(response.data["hydra:member"]));
             
         });

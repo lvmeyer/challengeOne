@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/home/Home.vue";
 import filmDb from "../../films.json";
+import ErrorView from "../views/stripe/Error.vue";
+import SuccessView from "../views/stripe/Success.vue";
+// import Stripe from "../views/stripe/Stripe.vue";
 
 const routes = [
   {
@@ -59,6 +62,21 @@ const routes = [
     name: "purchase",
     component: () => import("../views/movie/Reservation.vue"),
   },
+  {
+    path: '/success',
+    name: 'successview',
+    component: SuccessView
+  },
+  {
+    path: '/error',
+    name: 'errorview',
+    component: ErrorView
+  },
+/*   {
+    path: '/stripe',
+    name: 'stripe',
+    component: Stripe
+  } */
 ];
 
 export const router = createRouter({
