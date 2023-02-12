@@ -1,22 +1,27 @@
 <template>
-  <StripeElements
-    v-if="stripeLoaded"
-    v-slot="{ elements }"
-    ref="elms"
-    :stripe-key="stripeKey"
-    :instance-options="instanceOptions"
-    :elements-options="elementsOptions"
-  >
-    <StripeElement ref="card" :elements="elements" :options="cardOptions" />
-  </StripeElements>
-  <button type="button" @click="pay">Pay</button>
+    <StripeElements
+      v-if="stripeLoaded"
+      v-slot="{ elements }"
+      ref="elms"
+      :stripe-key="stripeKey"
+      :instance-options="instanceOptions"
+      :elements-options="elementsOptions"
+    >
+      <StripeElement ref="card" :elements="elements" :options="cardOptions" />
+    </StripeElements>
+    <button @click="handleSubmit">Pay</button>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onBeforeMount } from 'vue'
 import { loadStripe } from '@stripe/stripe-js'
-import StripeElements from '../../components/StripeElements.vue' //../../src/components/StripeElements.vue'
-import StripeElement from '../../components/StripeElement.vue' //'../../src/components/StripeElement.vue'
+import { StripeElements, StripeElement } from 'vue-stripe-js'
+
+const paymentData = {
+        // payment data
+        "amount": 1000,
+        "currency": "eur"
+    };
 
 export default defineComponent({
   name: 'CardOnly',
@@ -27,7 +32,7 @@ export default defineComponent({
   },
 
   setup() {
-    const stripeKey = ref('pk_test_51MZMjtFjFobJPxaLppMR5kL4HEcciaB5S1rApXfUIfCsQIkuNWbBD86vWTqNX6fJzDg10JqtZYFfbWCFcwUwSq1800RQGMkPxe') // test key
+    const stripeKey = ref(import.meta.env.VITE_PUBLISHABLE_KEY) // test key
     const instanceOptions = ref({
       // https://stripe.com/docs/js/initializing#init_stripe_js-options
     })
@@ -49,7 +54,7 @@ export default defineComponent({
       stripePromise.then(() => {
         stripeLoaded.value = true
       })
-    })
+    });
 
     return {
       stripeKey,
@@ -61,18 +66,48 @@ export default defineComponent({
       elms,
     }
   },
-
   methods: {
-    pay() {
-      // Get stripe element
-      const cardElement = this.card.stripeElement
+      async handleSubmit () {
 
-      // Access instance methods, e.g. createToken()
-      this.elms.instance.createToken(cardElement).then((result: object) => {
-        // Handle result.error or result.token
-        console.log(result)
-      })
-    },
-  },
+        try {
+          const response = await fetch('https://localhost/payment', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              amount: 1000,
+              currency: 'usd'
+            })
+          });
+
+          const data = await response.json();
+          console.log(data.client_secret);
+
+          const stripe = await loadStripe(import.meta.env.VITE_PUBLISHABLE_KEY);
+
+        const { paymentIntent, error } = await stripe.confirmCardPayment(data.client_secret, {
+          payment_method: {
+            card: this.$refs.card.element,
+            billing_details: {
+              name: 'Test name'
+            }
+          }
+        });
+
+        if (error) {
+          console.error(error);
+        } else {
+          console.log(paymentIntent);
+        }
+
+        } catch (error) {
+          console.error(error);
+      }
+
+
+    }
+  }
+
 })
 </script>

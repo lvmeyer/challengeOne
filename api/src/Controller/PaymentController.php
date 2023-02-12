@@ -32,7 +32,7 @@ class PaymentController
         ]);
 
         return new JsonResponse([
-            'id' => $paymentIntent->id,
+            // 'id' => $paymentIntent->id,
             'client_secret' => $paymentIntent->client_secret,
         ]);
     }

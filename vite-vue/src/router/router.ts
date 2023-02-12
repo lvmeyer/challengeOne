@@ -4,6 +4,7 @@ import filmDb from "../../films.json";
 import ErrorView from "../views/stripe/Error.vue";
 import SuccessView from "../views/stripe/Success.vue";
 import Stripe from "../views/stripe/Stripe.vue";
+import StripeTest from "../views/stripe/StripeTest.vue";
 
 const routes = [
   {
@@ -76,6 +77,11 @@ const routes = [
     path: '/stripe',
     name: 'stripe',
     component: Stripe
+  },
+  {
+    path: '/stripe-test',
+    name: 'stripeTest',
+    component: StripeTest
   }
 ];
 

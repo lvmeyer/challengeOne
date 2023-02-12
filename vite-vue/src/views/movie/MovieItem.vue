@@ -24,9 +24,10 @@
                     </template>
                     <template v-slot:body>
                         <h3>{{seances[index].start_time}}</h3>
+                        <h3>{{seances[index].price}}€</h3>
                     </template>
                     <template v-slot:footer>
-                        <button class="button-cta cta-button">Réserver</button>
+                        <a href="/stripe-test" class="button-cta cta-button">Réserver</a>
                     </template>
                 </modal>
             </div>
