@@ -40,9 +40,6 @@ class Seance
     #[ORM\OneToMany(mappedBy: 'seance_id', targetEntity: Ticket::class)]
     private Collection $tickets;
 
-    #[ORM\Column]
-    private ?float $price = null;
-
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
@@ -139,18 +136,6 @@ class Seance
                 $ticket->setSeanceId(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(float $price): self
-    {
-        $this->price = $price;
 
         return $this;
     }
