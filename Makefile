@@ -7,7 +7,7 @@ start:
 	docker compose up -d
 
 stop:
-	docker compose down
+	docker compose down --remove-orphans
 
 db:
 	docker compose exec php bin/console doctrine:schema:update --force
