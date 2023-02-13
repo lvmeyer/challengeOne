@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/home/Home.vue";
 import filmDb from "../../films.json";
+import ErrorView from "../views/stripe/Error.vue";
+import SuccessView from "../views/stripe/Success.vue";
+import Stripe from "../views/stripe/Stripe.vue";
+import StripeTest from "../views/stripe/StripeTest.vue";
 
 const routes = [
   {
@@ -29,6 +33,11 @@ const routes = [
     component: () => import("../views/movie/Movies.vue"),
   },
   {
+    path: "/movie/:id",
+    name: "movie.show",
+    component: () => import("../views/movie/MovieItem.vue"),
+  },
+  {
     path: "/demo/:id",
     name: "demo.show",
     component: () => import("../views/Demo.vue"),
@@ -54,6 +63,26 @@ const routes = [
     name: "purchase",
     component: () => import("../views/movie/Reservation.vue"),
   },
+  {
+    path: '/success',
+    name: 'successview',
+    component: SuccessView
+  },
+  {
+    path: '/error',
+    name: 'errorview',
+    component: ErrorView
+  },
+  {
+    path: '/stripe',
+    name: 'stripe',
+    component: Stripe
+  },
+  {
+    path: '/stripe-test',
+    name: 'stripeTest',
+    component: StripeTest
+  }
 ];
 
 export const router = createRouter({
