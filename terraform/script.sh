@@ -14,8 +14,8 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin --yes
 sudo apt-get install docker-compose --yes
 
-git clone https://github.com/DanLevyM/challengeOne.git aws_test
-cd aws_test/
+# git clone https://github.com/DanLevyM/challengeOne.git aws_test
+# cd aws_test/
 
 # sudo docker compose up -d
 # sudo sleep 30
