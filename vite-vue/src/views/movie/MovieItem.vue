@@ -9,15 +9,15 @@
         <h2> Seances</h2>
         <div class="row">
             <div v-if="seances" v-for="(seance, index) in seances" :key="seance.id" class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <button @click="showModals[index] = true" class="btn btn-primary">
-                                {{ seance.start_time }}
-                            </button> 
-                        </div>  
-                    </div>
-            
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <button @click="showModals[index] = true" class="btn btn-primary">
+                            {{ seance.start_time }}
+                        </button> 
+                    </div>  
+                </div>
+                
                 <modal v-if="showModals[index]" @close="showModals[index] = false">
                     <template v-slot:header>
                         <h2>{{movie.title}}</h2>
@@ -27,7 +27,7 @@
                         <h3>{{seances[index].price}}€</h3>
                     </template>
                     <template v-slot:footer>
-                        <a href="/stripe-test" class="button-cta cta-button">Réserver</a>
+                        <a @click="emitDataEvent(seances[index].price)" href="/stripe-test" class="button-cta cta-button">Réserver</a>
                     </template>
                 </modal>
             </div>
@@ -41,9 +41,10 @@
 </template>
 
 <script>
-import { ref, reactive, onBeforeMount } from 'vue';
+    import { ref, reactive, onBeforeMount, onMounted } from 'vue';
     import { useRoute } from 'vue-router';
     import modal from "../../components/Modal.vue"
+    import StripeTest from '../stripe/StripeTest.vue';
 
     const API_URL = import.meta.env.VITE_API_URL;
     function getHoursAndMinutes (dateString) {
@@ -76,7 +77,8 @@ import { ref, reactive, onBeforeMount } from 'vue';
     export default {
         
         components: {
-            modal
+            modal,
+            StripeTest
         },
         setup () {
             
@@ -107,6 +109,7 @@ import { ref, reactive, onBeforeMount } from 'vue';
                 }
             
             });
+
             
             return {
                 movie,
@@ -114,7 +117,12 @@ import { ref, reactive, onBeforeMount } from 'vue';
                 seances,
                 showModals
             }
-        }                
+        },
+    /*  methods: {
+            emitDataEvent(seance) {
+                bus.$emit('data-event', seance)
+        } */
+    //}                
         
         
     
