@@ -17,6 +17,7 @@ async function handleLogout() {
             <router-link to="/" class="p-2 m-3">Home</router-link>
             <router-link to="/about" class="p-2 m-3">About</router-link>
             <router-link to="/movies" class="p-2 m-3">Movies</router-link>
+            <router-link to="/admin/dashboard" class="p-2 m-3">Moderation</router-link>
             <router-link
                 :to="{ name: 'demo.show', params: { id: '1' } }"
                 class="p-2 m-3"

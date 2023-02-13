@@ -63,6 +63,11 @@ const routes = [
     component: () => import("../views/movie/Reservation.vue"),
   },
   {
+    path: "/admin/dashboard",
+    name: "admin",
+    component: () => import("../views/adm/Dashboard.vue"),
+  },
+  {
     path: '/success',
     name: 'successview',
     component: SuccessView
