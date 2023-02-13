@@ -27,6 +27,7 @@ async function handleLogout() {
                 class="p-2 m-3"
                 >Demo2</router-link
             >
+            <router-link to="/products" class="p-2 m-3">Products</router-link>
         </div>
         <div v-if="user.isLoggedIn">
             <a href="#" class="p-2 m-3" v-on:click="handleLogout">Logout</a>
