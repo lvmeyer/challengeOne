@@ -16,6 +16,14 @@
                         <p class="bin">Delete</p>
                     </td>
                 </tr>
+                <tr>
+                    <td class="dashboard-admin">User 2</td>
+                    <td class="dashboard-admin">blablabla</td>
+                    <td class="dashboard-admin action">
+                        <p class="keep">Good</p>
+                        <p class="bin">Delete</p>
+                    </td>
+                </tr>
             </thead>
             <tbody>
             </tbody>
