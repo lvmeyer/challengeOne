@@ -1,18 +1,33 @@
 <script>
-import { ref, onBeforeMount} from 'vue';
+import { ref, onBeforeMount, reactive} from 'vue';
 import { useRoute } from 'vue-router';
-import modal from "../../components/EditModal.vue"
+import modal from "../../components/Modal.vue"
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 export default {
     components: {
+      modal
     },
     setup () {
 
-        function editModal(){
-    let element = this.$refs.modal.$el
-    $(element).modal('show')
-  }
+        const products = ref({});
+        const showModals = ref(false);
+
+        async function editProduct(id, name, price) {
+          const formData = {}
+          formData.id = id
+          formData.name = name;
+          formData.price = price;
+          const response = await fetch(`${API_URL}/products/${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-type': 'application/merge-patch+json' 
+            },
+            body: JSON.stringify(formData)
+          });
+          return await response.json();
+        }
 
         async function createNewProduct(name, price) {
           const formData = {}
@@ -30,8 +45,6 @@ export default {
           return await response.json();
         }
         
-        const products = ref({});
-      
         function deleteProduct(id){
           fetch(`${API_URL}/products/` + id, {
             method: 'DELETE',
@@ -56,12 +69,11 @@ export default {
             products,
             deleteProduct,
             createNewProduct,
-            editModal
+            showModals,
+            editProduct
         }
     }      
          
-    
-    
 
 };
 
@@ -84,8 +96,29 @@ export default {
           <th scope="row">{{ product.id }}</th>
           <td>{{ product.name }}</td>
           <td>{{ product.price }}</td>
-          <td><button class="buttonAction"><i class="bi bi-trash text-danger" @click.prevent="deleteProduct(product.id)"></i></button><button class="buttonAction"><i class="bi bi-pencil-square text-warning" @click.prevent="showModal()"><editModal ref="modal"></editModal></i></button></td>
-          
+          <td><button class="buttonAction"><i class="bi bi-trash text-danger" @click.prevent="deleteProduct(product.id)"></i></button>
+              <button class="buttonAction"><i class="bi bi-pencil-square text-warning" @click="showModals = true"></i></button></td>
+              <modal v-if="showModals" @close="showModals = false">
+                <template v-slot:header>
+                  <h2>{{product.id}}</h2>
+                </template>
+                <template v-slot:body>
+                  <form @submit.prevent="editProduct(product.id, editName, editPrice)">
+                    <div class="form-group">
+                      <label for="Nom">Nom</label> 
+                      <input type="text" class="form-control" v-model="editName" :placeholder="product.name">
+                    </div>
+                    <div class="form-group">
+                      <label>Prix</label> 
+                      <input type="number" class="form-control" v-model="editPrice" :placeholder="product.price">
+                    </div>
+                    <button>Enregistrer</button>
+                  </form>
+                </template>
+                <template v-slot:footer>
+                  <p></p>
+                </template>
+              </modal>
         </tr>
         <tr>
           <td>
@@ -98,6 +131,7 @@ export default {
         </tr>
       </tbody>
     </table>
+    
   </div>
 </template>
 
