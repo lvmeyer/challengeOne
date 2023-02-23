@@ -27,24 +27,33 @@
                         <h3>{{seances[index].price}}€</h3>
                     </template>
                     <template v-slot:footer>
-                        <a @click="emitDataEvent(seances[index].price)" href="/stripe-test" class="button-cta cta-button">Réserver</a>
+                        <a @click="emitDataEvent(seances[index].price)" :href="'/payment/' + seance.id" class="button-cta cta-button">Réserver</a>
                     </template>
                 </modal>
             </div>
             <div v-else>
                 Aucune séance pour le moment
             </div>
+            <div class="comment-contents">
+                <p>Comments:</p>
+                <div v-if="comments" v-for="(comment) in comments" :key="comment.id" class="col-sm-3">
+                    <div class="comment">
+                        <h3 class="comment-content">{{ comment.title }}</h3>
+                        <p class="comment-content">{{ comment.description }}</p> 
+                    </div>
+                </div>
+            </div>
         </div>
-            
-        </div>
-
+    </div>
 </template>
+
+
 
 <script>
     import { ref, reactive, onBeforeMount, onMounted } from 'vue';
     import { useRoute } from 'vue-router';
     import modal from "../../components/Modal.vue"
-    import StripeTest from '../stripe/StripeTest.vue';
+    import Stripe from '../stripe/Stripe.vue';
 
     const API_URL = import.meta.env.VITE_API_URL;
     function getHoursAndMinutes (dateString) {
@@ -78,13 +87,15 @@
         
         components: {
             modal,
-            StripeTest
+            Stripe
         },
         setup () {
             
             const movie = ref({});
             const seances_urls = ref({});
             const seances = reactive([]);
+            const comments = reactive([]);
+            const comments_url = ref({});
             const route = useRoute();
             const showModals = reactive(Array(seances.length).fill(false))
             onBeforeMount(async () => {
@@ -93,7 +104,18 @@
                     const data_movie = await res_movie.json();
                     movie.value = data_movie;
                     movie.value.release_date = new Date(movie.value.release_date).toLocaleDateString()
-                    seances_urls.value = movie.value.seances;
+                    seances_urls.value = movie.value.seance;
+
+                    // get comments
+                    comments_url.value = movie.value.comments;
+                    console.log(comments_url.value);
+                    for (const comment of comments_url.value) {
+                        await fetch(`${API_URL}${comment}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                comments.push(data);
+                        })   
+                    } 
 
                     for (const s of seances_urls.value) {
                         await fetch(`${API_URL}${s}`)
@@ -115,7 +137,9 @@
                 movie,
                 seances_urls,
                 seances,
-                showModals
+                showModals,
+                comments,
+                comments_url
             }
         },
     /*  methods: {
@@ -157,5 +181,24 @@
 
 .button-cta:hover {
     background-color: #6687BA;
+}
+
+.comment-contents {
+    border-color: grey;
+    border: solid;
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em;
+}
+
+.comment {
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em;
+    width: 100%;
+}
+
+.comment-content {
+    width: 100;
 }
 </style>
