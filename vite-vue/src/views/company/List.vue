@@ -19,6 +19,7 @@ export default {
           formData.id = id
           formData.name = name;
           formData.price = price;
+          console.log(formData)
           const response = await fetch(`${API_URL}/products/${id}`, {
             method: 'PATCH',
             headers: {
@@ -26,6 +27,7 @@ export default {
             },
             body: JSON.stringify(formData)
           });
+          console.log(response.json())
           return await response.json();
         }
 
@@ -97,8 +99,8 @@ export default {
           <td>{{ product.name }}</td>
           <td>{{ product.price }}</td>
           <td><button class="buttonAction"><i class="bi bi-trash text-danger" @click.prevent="deleteProduct(product.id)"></i></button>
-              <button class="buttonAction"><i class="bi bi-pencil-square text-warning" @click="showModals = true"></i></button></td>
-              <modal v-if="showModals" @close="showModals = false">
+              <button class="buttonAction"><i class="bi bi-pencil-square text-warning" @click="showModals = product.id"></i></button></td>
+              <modal v-show="showModals == product.id" @close="showModals = false">
                 <template v-slot:header>
                   <h2>{{product.id}}</h2>
                 </template>
@@ -112,7 +114,10 @@ export default {
                       <label>Prix</label> 
                       <input type="number" class="form-control" v-model="editPrice" :placeholder="product.price">
                     </div>
-                    <button>Enregistrer</button>
+                    <div id="button-container">
+                      <button id="save">Enregistrer</button>
+                    </div>
+                    
                   </form>
                 </template>
                 <template v-slot:footer>
@@ -137,6 +142,38 @@ export default {
 
 
 <style lang="css">
+
+  #button-container {
+    width: 100%;
+    display:block;
+    position:relative;
+    margin-top: 100px;
+    text-align: center;
+    height: auto;
+  }
+
+  #save {
+    color: #fff;
+    border-radius: 5px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+    outline: none;
+    background: linear-gradient(0deg, rgba(255,151,0,1) 0%, rgba(251,75,2,1) 100%);
+    width: 130px;
+    height: 40px;
+    line-height: 42px;
+    padding: 0;
+    border: none;
+    text-align: center;
+  }
+
   .buttonAction {
     background: none;
     border: none;
