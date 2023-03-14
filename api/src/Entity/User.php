@@ -84,6 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Subscription $subscription_id = null;
 
     #[ORM\OneToMany(mappedBy: 'user_admin_check', targetEntity: Review::class)]
+    #[Groups(['user:read', 'user:create', 'user:update', 'read:item:ticket'])]
     private Collection $reviews;
 
     public function __construct()
